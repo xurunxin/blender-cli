@@ -2,10 +2,10 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { CliError, ensure } from './core.mjs';
 
-// Each invocation owns exactly one MCP subprocess; the GUI/application bridge is separate.
+// One-shot fallback. Named task sessions keep their own MCP connection in session-daemon.
 export async function withMcp(spec, metadata, options, action) {
   const timeout = options.timeout || 60000;
-  const client = new Client({ name: metadata.id, version: '0.1.0' });
+  const client = new Client({ name: metadata.id, version: '0.2.0' });
   const transport = new StdioClientTransport({ ...spec, env: { ...process.env, ...spec.env }, stderr: 'pipe' });
   transport.stderr?.on('data', bytes => { if (options.verbose) process.stderr.write(bytes); });
   let timer;

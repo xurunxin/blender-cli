@@ -1,6 +1,6 @@
 {
   "name": "@xurunxin/blender-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "On-demand blender MCP command-line client with environment bootstrap and agent skills",
   "type": "module",
   "bin": {

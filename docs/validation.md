@@ -1,5 +1,14 @@
 # Validation — 2026-09-11
 
+## v0.2 task lifecycle
+
+- A named task reused the existing Blender GUI and bridge without an application restart.
+- Separate scene path query and tool-schema CLI invocations shared one MCP process (PID 32024 during this acceptance).
+- `session end` closed MCP and preserved the same Blender application process.
+- Shared lifecycle tests cover task reuse, authentication, in-flight request protection, idle MCP cleanup, startup failure, and precise application ownership. Normal GUI-close behavior is covered with controlled fixtures; no existing user application was closed.
+
+## v0.1 bootstrap baseline
+
 Platform: Windows, Node.js 24.20.0, Blender 5.2. Official Blender lab MCP v1.0.0.
 
 - `setup` fetched official versioned source, installed an isolated Python MCP runtime and built the extension archive. The existing official v1.0.0 application extension was detected and preserved. A second setup returned `changed: false`.

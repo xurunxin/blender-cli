@@ -1,6 +1,28 @@
 # blender-cli
 
-将官方 Blender lab MCP 变成按需 CLI。Agent 通过终端发现和调用工具，命令完成、失败或超时后关闭自己的 MCP 子进程；Blender 应用及其本机插件桥接独立运行。
+以目标任务管理 blender-cli 的应用和 MCP 生命周期。任务内复用同一应用和 MCP 进程，按目标完成、资源占用和用户后续使用决定保留或关闭。
+
+## 推荐任务流程（v0.2）
+
+```powershell
+blender-cli session start shot-01 --launch-app
+blender-cli --session shot-01 tools list
+blender-cli --session shot-01 tools inspect <工具名>
+blender-cli --session shot-01 tools call <工具名> --args-file args.json
+blender-cli session status shot-01
+# 目标完成：释放 MCP，应用继续保留
+blender-cli session end shot-01
+# 确认本任务启动的应用无未保存工作且不再需要时
+# blender-cli session end shot-01 --close-app
+```
+
+`--launch-app` 优先复用已有应用，只在没有对应应用时启动并记录进程归属。同名 start 幂等复用会话；一个 CLI 状态目录同时服务一个目标任务，其他目标会返回冲突。任务期间工具命令加 `--session`；已有会话时，省略该参数会失败，避免另开 MCP 抢占应用桥接。
+
+`session end` 默认只关闭 MCP。`--close-app` 仅正常关闭本任务启动、PID/路径/创建时间仍匹配的 Windows GUI；原生保存提示不会被绕过。复用的应用、身份不明的进程、后台应用及不支持的平台均保留，并返回原因。Agent 应先检查未保存内容、后台渲染/cook 和后续用途，再决定关闭时机。应用桥接随应用保留。
+
+会话仅在任务请求下创建，通过本机带随机凭据的通道供 CLI 调用，不注册为固定 Codex MCP。默认空闲 1800 秒回收 MCP，`session start --idle-timeout <seconds>` 可调整（1..86400）；进行中的请求不触发空闲回收。空闲回收、异常和中断均保留应用。超时后不自动重启/重试，先检查实际操作结果。
+
+无任务会话时仍支持一次性 `tools/call/batch`；它们只在该次命令期间运行 MCP。下面的单次示例也可在命令前加入 `--session <task>`，在任务内复用连接。
 
 ## 安装和初始化
 
@@ -39,7 +61,7 @@ blender-cli tools call <工具名> --args-file args.json
 
 `batch calls.json` 顺序执行 `[{"tool":"名称","args":{}}]`，共享一个短暂会话，首次错误立即停止并返回已完成项。`resources list/read` 访问上游资源（仅在上游支持时）。
 
-JSON stdout 提供 `{ok:true,...}` 或 `{ok:false,error:{code,message,details}}`；`--verbose` 将上游日志写入 stderr。退出码 `0` 成功，`1` 环境/运行/工具错误，`2` 参数错误。`TOOL_ERROR` 保留原始 MCP 内容。默认整个 MCP 会话 60 秒超时，用 `--timeout 180000` 调整；不自动重试已提交的应用操作，超时后先检查场景结果。
+JSON stdout 提供 `{ok:true,...}` 或 `{ok:false,error:{code,message,details}}`；`--verbose` 将上游日志写入 stderr。退出码 `0` 成功，`1` 环境/运行/工具错误，`2` 参数错误。`TOOL_ERROR` 保留原始 MCP 内容。一次性模式默认整个 MCP 会话 60 秒超时，任务模式按每个请求计算，用 `--timeout 180000` 调整；不自动重试已提交的应用操作，超时后先检查场景结果。
 
 ## 项目 skills
 
