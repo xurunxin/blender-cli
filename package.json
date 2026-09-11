@@ -1,0 +1,36 @@
+{
+  "name": "@xurunxin/blender-cli",
+  "version": "0.1.0",
+  "description": "On-demand blender MCP command-line client with environment bootstrap and agent skills",
+  "type": "module",
+  "bin": {
+    "blender-cli": "src/cli.mjs"
+  },
+  "files": [
+    "src",
+    "assets",
+    "skills",
+    "docs",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+    "scripts/install.ps1"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "check": "node scripts/check.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "commander": "15.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xurunxin/blender-cli.git"
+  },
+  "license": "MIT",
+  "private": true
+}

@@ -1,0 +1,11 @@
+node_modules/
+*.tgz
+.agents/
+.claude/
+.env
+.env.*
+!.env.example
+.local/
+__pycache__/
+*.pyc
+artifacts/

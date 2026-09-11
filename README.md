@@ -1,0 +1,73 @@
+# blender-cli
+
+将官方 Blender lab MCP 变成按需 CLI。Agent 通过终端发现和调用工具，命令完成、失败或超时后关闭自己的 MCP 子进程；Blender 应用及其本机插件桥接独立运行。
+
+## 安装和初始化
+
+需要 Node.js 22+、uv、Git 和符合官方 MCP 扩展要求的 Blender。私有仓库需要有权限的 GitHub 账号：
+
+```powershell
+gh repo clone xurunxin/blender-cli
+cd blender-cli
+npm ci
+npm install --global .
+blender-cli doctor
+blender-cli setup --dry-run
+blender-cli setup --timeout 180000
+blender-cli app launch
+blender-cli doctor --connect
+blender-cli tools list
+```
+
+也可以用 `npm install --global git+ssh://git@github.com/xurunxin/blender-cli.git`（需 GitHub SSH 权限）。不需要 npm registry 包。
+
+Windows 新环境可执行 `pwsh -NoProfile -File scripts/install.ps1 -InstallPrerequisites`，通过 winget 补齐 Node.js、uv，再安装 CLI 并 setup。若系统缺 Git，请先安装 Git；Blender 从[官方网站](https://www.blender.org/download/)安装。已有依赖时去掉 `-InstallPrerequisites`。`-SkipSetup` 仅安装 CLI，`-Project <path>` 同时安装项目 skill。
+
+setup 安装固定版本的官方源码、隔离 Python/MCP 依赖和应用扩展。自定义安装目录用 `--app-path`，离线或现成源码用 `--source`。已有插件与用户偏好按冲突保护规则保留；详细的上游版本、启动方式与离线限制见 [Blender 初始化](docs/blender-setup.md)。
+
+`app launch` 打开带桥接的 Blender；`app launch --headless` 使用后台模式。普通启动的 Blender 可能尚未启用桥接。端口默认 9876，仅允许本机 loopback，`setup --port <n>` 持久化变更。已有端口被占用时先确认归属，CLI 不关闭其他应用进程。
+
+## 动态工具调用
+
+```powershell
+blender-cli tools list
+blender-cli tools inspect <工具名>
+blender-cli tools call <工具名> --args-file args.json
+```
+
+工具名称、说明和输入 schema 每次从当前 MCP 实时发现。`tools list --full` 输出完整 schema；`call <工具名>` 是简写。参数支持 `--args '<JSON>'`、`--args-file` 或 `--stdin`，三选一；PowerShell 推荐 UTF-8 JSON 文件。
+
+`batch calls.json` 顺序执行 `[{"tool":"名称","args":{}}]`，共享一个短暂会话，首次错误立即停止并返回已完成项。`resources list/read` 访问上游资源（仅在上游支持时）。
+
+JSON stdout 提供 `{ok:true,...}` 或 `{ok:false,error:{code,message,details}}`；`--verbose` 将上游日志写入 stderr。退出码 `0` 成功，`1` 环境/运行/工具错误，`2` 参数错误。`TOOL_ERROR` 保留原始 MCP 内容。默认整个 MCP 会话 60 秒超时，用 `--timeout 180000` 调整；不自动重试已提交的应用操作，超时后先检查场景结果。
+
+## 项目 skills
+
+在目标项目运行，或指定已有目录：
+
+```powershell
+blender-cli skills install
+blender-cli skills install --target "D:\MyProject"
+blender-cli skills install --target "D:\MyProject" --agent all --dry-run
+```
+
+默认安装到 `.agents/skills/blender-cli/SKILL.md`；`--agent claude` 安装到 `.claude/skills`，`all` 安装两处。保护定制 skill，只有 `--force` 才覆盖同名文件；保留无关文件并拒绝 symlink/junction 逃逸。
+
+## 固定 MCP 迁移
+
+CLI 实际调用成功后执行 `blender-cli integration disable-codex --dry-run` 查看匹配条目，再运行 `blender-cli integration disable-codex`。它仅禁用 Codex 的 `blender` 固定 MCP 表，保存原配置旁的唯一备份，保留其他服务。重启 Codex 生效。恢复时将对应表的 `enabled` 改回 `true`。
+
+CLI setup 与 Codex 配置迁移是两个独立操作。CLI 状态默认保存到用户本地数据目录 `blender-cli`，支持 `--home <directory>` 或 `BLENDER_CLI_HOME` 隔离环境；`config` 查看实际路径。
+
+## 开发和验收
+
+```powershell
+npm ci
+npm test
+npm run check
+npm pack --dry-run
+```
+
+测试包含 stdio 生命周期、分页、工具错误、超时、技能安装保护与精确配置迁移，应用适配另有针对性测试。实际应用结果见 [验收记录](docs/validation.md)。主要验收平台是 Windows；macOS/Linux 探测路径未完成目标平台应用验收。
+
+上游为 [Blender lab blender_mcp](https://projects.blender.org/lab/blender_mcp)，并非其他同名社区 MCP。客户端使用 [官方 MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk/tree/v1.x)。第三方信息见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
