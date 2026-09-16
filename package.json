@@ -21,7 +21,10 @@
   },
   "scripts": {
     "test": "node --test tests/*.test.mjs",
-    "check": "node scripts/check.mjs"
+    "check": "node scripts/check.mjs",
+    "test:wiki": "node --test tests/wiki.test.mjs",
+    "wiki:validate": "node src/wiki-cli.mjs validate",
+    "test:wiki:package": "node scripts/wiki-package-smoke.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.30.0",

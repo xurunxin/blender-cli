@@ -1,0 +1,296 @@
+{
+  "schema_version": 1,
+  "revision": "2026-09-16.1",
+  "sources": [
+    {
+      "id": "S-CLI",
+      "title": "blender-cli：任务会话与实时工具契约",
+      "url": "https://github.com/xurunxin/blender-cli/blob/57281ac13580db2df5c67c6449a86057f684b289/src/cli.mjs",
+      "type": "repository",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "repository-file",
+      "version_scope": "固定提交 57281ac；CLI 0.2.0",
+      "notes": "已读取 CLI、Skill、README；本次 Wiki 集成不改变现有会话语义。"
+    },
+    {
+      "id": "S-OPERATORS",
+      "title": "Python API: Operators (bpy.ops)",
+      "url": "https://docs.blender.org/api/current/bpy.ops.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "滚动文档；执行前匹配现场 Blender 版本",
+      "notes": "复核错误上下文会抛出 RuntimeError 及 poll 检查说明；未全文抓取。"
+    },
+    {
+      "id": "S-SURF",
+      "title": "SURF Blender course: Operators",
+      "url": "https://surf-visualization.github.io/blender-course/api/operators/",
+      "type": "community",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "section-reviewed",
+      "version_scope": "原作者教学资料；具体 API 需现场核查",
+      "notes": "阅读操作符前置条件、Python tooltips 和布尔操作案例。"
+    },
+    {
+      "id": "S-DUCK",
+      "title": "TheDuckCow: Operator translations",
+      "url": "https://theduckcow.com/dev/blender/operator-translations/",
+      "type": "community",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "section-reviewed",
+      "version_scope": "旧版原作者文章；不复用旧 API 代码",
+      "notes": "只采用减少隐式选择/上下文依赖的设计思路，未复制或运行旧代码。"
+    },
+    {
+      "id": "S-BMESH",
+      "title": "BMesh Module",
+      "url": "https://docs.blender.org/api/current/bmesh.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "滚动文档；执行前匹配现场 Blender 版本",
+      "notes": "复核 BMesh 模块定位；具体编辑模式生命周期和函数签名执行前再查。"
+    },
+    {
+      "id": "S-BEVEL",
+      "title": "Bevel Modifier",
+      "url": "https://docs.blender.org/manual/en/latest/modeling/modifiers/generate/bevel.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "滚动文档；执行前匹配现场 Blender 版本",
+      "notes": "复核可控倒角的用途；参数、默认值和拓扑效果未实测。"
+    },
+    {
+      "id": "S-UV",
+      "title": "UV Seams",
+      "url": "https://docs.blender.org/manual/en/latest/modeling/meshes/uv/unwrapping/seams.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "滚动文档；执行前匹配现场 Blender 版本",
+      "notes": "复核接缝与展开切分的关系；检查表与验收步骤为本库设计。"
+    },
+    {
+      "id": "S-PBR",
+      "title": "Principled BSDF",
+      "url": "https://docs.blender.org/manual/en/latest/render/shader_nodes/shader/principled.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "滚动文档；执行前匹配现场 Blender 版本",
+      "notes": "复核通用分层表面着色用途；不固定输入下标或旧版实现。"
+    },
+    {
+      "id": "S-BAKE",
+      "title": "Cycles Render Baking",
+      "url": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "滚动文档；执行前匹配现场 Blender 版本",
+      "notes": "复核活动 Image Texture / Color Attribute 目标说明，并参考可读旧版烘焙手册核对流程原则；未进行 Blender 烘焙。"
+    },
+    {
+      "id": "S-FIELDS",
+      "title": "Geometry Nodes: Fields",
+      "url": "https://docs.blender.org/manual/en/latest/modeling/geometry_nodes/fields.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "滚动文档；执行前匹配现场 Blender 版本",
+      "notes": "复核场是函数的概念；相关页面直接打开失败，保留摘录级标记。"
+    },
+    {
+      "id": "S-ATTR",
+      "title": "Geometry Nodes: Attributes",
+      "url": "https://docs.blender.org/manual/en/latest/modeling/geometry_nodes/attributes_reference.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "滚动文档；执行前匹配现场 Blender 版本",
+      "notes": "复核属性域说明；命名属性、域检查与样本验收需现场进行。"
+    },
+    {
+      "id": "S-INSTANCES",
+      "title": "Geometry Nodes: Instances",
+      "url": "https://docs.blender.org/manual/en/latest/modeling/geometry_nodes/instances.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "滚动文档；执行前匹配现场 Blender 版本",
+      "notes": "复核实体化增加内存与几何处理成本；具体消耗需小样测量。"
+    },
+    {
+      "id": "S-SIM",
+      "title": "Geometry Nodes: Simulation Zone",
+      "url": "https://docs.blender.org/manual/en/latest/modeling/geometry_nodes/simulation/simulation_zone.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "滚动文档；执行前匹配现场 Blender 版本",
+      "notes": "复核模拟与缓存说明；状态与时间步的完整网络未运行。"
+    },
+    {
+      "id": "S-SIM-BAKE",
+      "title": "Simulation Nodes: Baking",
+      "url": "https://docs.blender.org/manual/en/latest/physics/simulation_nodes.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "滚动文档；执行前匹配现场 Blender 版本",
+      "notes": "复核保存位置与烘焙数据位置关联；不泛化为所有物理系统的相同缓存格式。"
+    },
+    {
+      "id": "S-CGWIKI",
+      "title": "CGWiki: Blender Geometry Nodes",
+      "url": "https://tokeru.com/cgwiki/BlenderGeoNodes.html",
+      "type": "community",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "section-reviewed",
+      "version_scope": "原作者跨 Houdini/Blender 学习资料",
+      "notes": "阅读几何流、Position/Set Position、场上下文与模拟类比；没有使用第三方 blend 文件。"
+    },
+    {
+      "id": "S-SAMPLE",
+      "title": "Cycles Sampling",
+      "url": "https://docs.blender.org/manual/en/latest/render/cycles/render_settings/sampling.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "滚动文档；执行前匹配现场 Blender 版本",
+      "notes": "复核采样原理；质量/耗时小样与验收是本库建议，不保证固定参数。"
+    },
+    {
+      "id": "S-CMD",
+      "title": "Command Line Rendering (4.1 manual)",
+      "url": "https://docs.blender.org/manual/en/4.1/advanced/command_line/render.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "Blender 4.1 文档；执行前核对当前 --help",
+      "notes": "复核参数按顺序执行的规则；不把旧版选项全集视为当前运行契约。"
+    },
+    {
+      "id": "S-ACTIONS",
+      "title": "Animation Actions",
+      "url": "https://docs.blender.org/manual/en/latest/animation/actions.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "滚动文档；执行前匹配现场 Blender 版本",
+      "notes": "复核 Action 内 Slot 组织不同动画数据；未执行动画 API。"
+    },
+    {
+      "id": "S-SLOTS",
+      "title": "Blender 4.4: Slotted Actions",
+      "url": "https://developer.blender.org/docs/release_notes/4.4/animation_rigging/",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "Blender 4.4 版本迁移说明",
+      "notes": "复核 Slotted Actions 及旧版本只看到首个 Slot 的兼容提示；当前结构仍需现场查询。"
+    },
+    {
+      "id": "S-CLOTH",
+      "title": "Cloth Collisions",
+      "url": "https://docs.blender.org/manual/en/latest/physics/cloth/settings/collisions.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "滚动文档；执行前匹配现场 Blender 版本",
+      "notes": "复核碰撞物启用要求；间距与质量的诊断由社区原始案例补充，未实机模拟。"
+    },
+    {
+      "id": "S-GLTF",
+      "title": "glTF 2.0 Import/Export",
+      "url": "https://docs.blender.org/manual/en/latest/addons/scene_gltf2.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "滚动文档；执行前匹配现场 Blender 版本",
+      "notes": "复核材质表示/重建说明；支持特性以当前导出器和目标端联合验收。"
+    },
+    {
+      "id": "S-COLOR",
+      "title": "Color Management (4.0 manual)",
+      "url": "https://docs.blender.org/manual/nb/4.0/render/color_management.html",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "Blender 4.0 文档；只参考颜色与数据纹理区别",
+      "notes": "复核 Non-Color 数据图不做颜色转换的说明；新 OCIO 工作空间与视图名称现场核验。"
+    },
+    {
+      "id": "S-SCAN",
+      "title": "Poly Haven: Photoscanned Texture Creation Process",
+      "url": "https://blog.polyhaven.com/photoscanned-texture-creation-process/",
+      "type": "community",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "section-reviewed",
+      "version_scope": "原作者摄影测量纹理制作流程",
+      "notes": "阅读烘焙平面对齐、法线和高低细节源选择；该流程部分烘焙在 RealityCapture，不当作 Blender 操作教程照搬。"
+    },
+    {
+      "id": "S-AGX",
+      "title": "CG Cookie: AgX / raw workflow",
+      "url": "https://blog.cgcookie.com/posts/the-secret-to-rendering-vibrant-colors-with-agx-in-blender-is-the-raw-workflow/",
+      "type": "community",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "section-reviewed",
+      "version_scope": "原作者文章；具体 OCIO 配置以现场为准",
+      "notes": "阅读线性 EXR 到 Resolve/Nuke 的交接原则；不等于所有 EXR 均有相同色域。"
+    },
+    {
+      "id": "S-GLASS",
+      "title": "Blender Stack Exchange: Principled to glTF",
+      "url": "https://blender.stackexchange.com/questions/287127/how-to-correctly-export-principled-bsdf-material-to-gltf",
+      "type": "community",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "section-reviewed",
+      "version_scope": "2023 年原始案例；不是当前完整 glTF 规范",
+      "notes": "阅读网页与 Blender 照明/玻璃差异讨论；只作为定位问题的候选。"
+    },
+    {
+      "id": "S-BAKE-CASE",
+      "title": "Blender Artists: Active bake target",
+      "url": "https://blenderartists.org/t/texture-baking-what-is-active-image-texture/1486487",
+      "type": "community",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "2023 年原始讨论；不能外推新版行为",
+      "notes": "复核活动图像目标歧义；由此设计独立目标图像与写入后检查，未复现讨论中的缺陷。"
+    },
+    {
+      "id": "S-FIELD-CASE",
+      "title": "Blender Stack Exchange: Struggling with fields",
+      "url": "https://blender.stackexchange.com/questions/328743/im-struggling-with-fields",
+      "type": "community",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "原始字段求值案例；示例版本与现场可能不同",
+      "notes": "复核 source geometry、context 和采样输入的区别；未复制节点图。"
+    },
+    {
+      "id": "S-CLOTH-CASE",
+      "title": "Blender Artists: Cloth collapses into itself",
+      "url": "https://blenderartists.org/t/why-does-my-cloth-simulation-collapse-and-crumbles-into-itself/1417687",
+      "type": "community",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "2022 年原始讨论",
+      "notes": "复核初始间距与碰撞距离的诊断候选；不采用统一放大倍率作为通用答案。"
+    },
+    {
+      "id": "S-RELEASES",
+      "title": "Blender Releases",
+      "url": "https://www.blender.org/releases/",
+      "type": "official",
+      "reviewed_on": "2026-09-16",
+      "review_depth": "search-excerpt",
+      "version_scope": "2026-09-16 检索；发行状态会变化",
+      "notes": "确认检索时存在 5.2 LTS；发行状态不作为本 Wiki 的运行验证证据。"
+    }
+  ]
+}
