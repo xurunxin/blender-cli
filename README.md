@@ -2,6 +2,22 @@
 
 以目标任务管理 blender-cli 的应用和 MCP 生命周期。任务内复用同一应用和 MCP 进程，按目标完成、资源占用和用户后续使用决定保留或关闭。
 
+## Agent Wiki（离线知识检索）
+
+```powershell
+blender-cli wiki search "布料穿透" --kind recipe --limit 3
+blender-cli wiki search "几何节点散布" --max-chars 6000
+blender-cli wiki show workflow-game-asset --section steps
+blender-cli wiki sources S-GLTF
+blender-cli wiki status
+```
+
+45 个原创归纳条目（18 个主题、21 个排错配方、6 条工作流），关联 29 条官方、社区原作者及仓库来源。只读随包 Markdown；不启动 Blender/MCP、不读取用户配置，不需要 API key、向量库或 Python。先 Wiki 规划，再现场 `tools list/inspect`，最后检查场景与产物。
+
+[Wiki 首页与命令参考](docs/wiki/README.md) · [可直接阅读的知识手册](docs/wiki/guide.md) · [来源与复核深度](docs/wiki/sources.json) · [本次验收边界](docs/wiki/VALIDATION.md)。
+
+原生入口需要正常安装 CLI 的 Node 依赖；完全无依赖的查询入口为 `node src/wiki-cli.mjs search "布料穿透"`。安装后的原有 `blender-cli` Skill 已增加 Wiki 路由；已有定制 Skill 仍受覆盖保护，不会自动替换。知识步骤未在 Blender 实机验收，不能将检索命中作为执行成功证据。
+
 ## 推荐任务流程（v0.2）
 
 ```powershell

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
+import { registerWikiCommands } from './wiki-cli.mjs';
 import { readFile } from 'node:fs/promises';
 import { metadata, doctor, setup, launch, server } from './app.mjs';
 import { CliError, ensure, positiveInt, readJson, loadConfig, saveConfig, output } from './core.mjs';
@@ -133,6 +134,7 @@ integration.command('disable-codex').description('仅禁用此应用的固定 Co
 program.command('config').description('显示当前 CLI 配置（独立于 Codex MCP 配置）')
   .action(wrap(async (_, command) => ({ config: (await context(command)).config })));
 program.addHelpText('after', `\n目标任务示例：\n  ${metadata.bin} session start shot-01 --launch-app\n  ${metadata.bin} --session shot-01 tools list\n  ${metadata.bin} --session shot-01 tools inspect <工具名>\n  ${metadata.bin} --session shot-01 tools call <工具名> --args-file args.json\n  ${metadata.bin} session end shot-01\n\n任务内复用同一 MCP 进程。end 默认保留应用；确认任务完成后可加 --close-app 请求正常关闭本任务启动的 GUI。\n没有任务会话时仍支持单次 tools/call/batch。空闲回收只关闭 MCP，不关闭应用。\n业务结果为 JSON stdout；日志为 stderr。退出码：0 成功，1 运行/工具/环境错误，2 参数错误。调用不自动重试。\n状态目录可通过 --home 或 ${metadata.id.toUpperCase().replaceAll('-', '_')}_HOME 指定。`);
+registerWikiCommands(program);
 try { await program.parseAsync(); }
 catch (e) {
   if (e.code === 'commander.helpDisplayed' || e.code === 'commander.version') process.exitCode = 0;

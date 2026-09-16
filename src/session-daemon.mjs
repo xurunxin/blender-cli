@@ -65,6 +65,10 @@ async function handle(req, res) {
     } finally { busy = false; lastUsed = Date.now(); }
   } catch (e) { json(res, { ok: false, error: { code: e.code || 'SESSION_ERROR', message: e.message, details: e.details } }); }
 }
+// The SDK uses unref'ed timers while closing stdio. Before the HTTP server exists,
+// keep the event loop alive so failed startup cleanup can persist its final state
+// and release the lock (notably after a missing executable on Windows).
+const bootstrapLifetime = setInterval(() => {}, 1000);
 try {
   await atomicJson(sessionPaths(config).lock, { instance: record.instance, pid: process.pid });
   await save();
@@ -84,4 +88,6 @@ try {
   await finish('failed');
   httpServer?.close();
   process.exitCode = 1;
+} finally {
+  clearInterval(bootstrapLifetime);
 }

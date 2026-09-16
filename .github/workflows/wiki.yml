@@ -1,0 +1,28 @@
+name: Wiki and CLI regression
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm run wiki:validate
+      - run: node src/cli.mjs --home __wiki_must_not_create__ wiki search "布料穿透" --limit 1
+      - run: node -e "if(require('node:fs').existsSync('__wiki_must_not_create__')) process.exit(1)"
+      - run: npm run test:wiki:package
